@@ -1,0 +1,15 @@
+name: Repository Created
+
+on:
+  repository:
+    types: [created]
+
+jobs:
+  new_repository_created:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run script for new repository
+        run: echo "New repository created!"
