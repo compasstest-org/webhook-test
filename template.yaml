@@ -21,6 +21,7 @@ actions:
       # 作成されたリポジトリの URL を取得
       REPO_URL=$(echo $RESPONSE | jq -r .html_url)
 
+      echo "Response: $RESPONSE"
       echo "Repository created: $REPO_URL"
 
       # 作成したリポジトリに対して `repository_dispatch` イベントを送信
