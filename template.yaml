@@ -9,10 +9,30 @@ variables:
 actions:
   - name: Create GitHub Repository
     run: |
-      curl -X POST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-      -H "Accept: application/vnd.github.v3+json" \
-      https://api.github.com/user/repos \
-      -d '{
-        "name": "${{ variables.repo_name }}",
-        "private": true
-      }'
+      # GitHub リポジトリ作成 API 呼び出し
+      RESPONSE=$(curl -X POST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+        -H "Accept: application/vnd.github.v3+json" \
+        https://api.github.com/user/repos \
+        -d '{
+          "name": "${{ variables.repo_name }}",
+          "private": true
+        }')
+
+      # 作成されたリポジトリの URL を取得
+      REPO_URL=$(echo $RESPONSE | jq -r .html_url)
+
+      echo "Repository created: $REPO_URL"
+
+      # 作成したリポジトリに対して `repository_dispatch` イベントを送信
+      curl -X POST "https://api.github.com/repos/compasstest-org/${{ variables.repo_name }}/dispatches" \
+        -H "Accept: application/vnd.github+json" \
+        -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+        -H "Content-Type: application/json" \
+        -d '{
+          "event_type": "repository_created",
+          "client_payload": {
+            "component_id": "new-component-id",
+            "component_name": "new-component-name",
+            "repository": "'"${REPO_URL}"'"
+          }
+        }'
