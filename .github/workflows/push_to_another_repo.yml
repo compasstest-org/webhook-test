@@ -34,12 +34,12 @@ jobs:
 
       - name: Copy specific file to destination repository
         run: |
-          # コピーしたいファイルを指定
-          cp ./template.yaml ./
+          # webhook-testリポジトリからtemplate.yamlをコピー
+          cp ../webhook-test/template.yaml ./template.yaml
 
       - name: Commit and push changes
         run: |
           cd temp-repo
-          git add path/to/destination/file.txt
-          git commit -m "Add specific file to destination repository" || echo "No changes to commit"
+          git add template.yaml  # 変更をステージング
+          git commit -m "Add template.yaml to destination repository" || echo "No changes to commit"
           git push origin main
