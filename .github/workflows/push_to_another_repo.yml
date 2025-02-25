@@ -18,13 +18,14 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          # GitHubのアクセストークンを使用して認証情報を設定
-          echo "https://$TOKEN@github.com" > ~/.git-credentials
+          # トークンを直接埋め込む
+          echo "https://your-token-here@github.com" > ~/.git-credentials
           git config --global credential.helper store
 
       - name: Clone destination repository directly into the current directory
         run: |
-          git clone --depth=1 https://github.com/compasstest-org/morimori.git temp-repo
+          # トークンをURLに埋め込んでクローン
+          git clone --depth=1 https://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@github.com/compasstest-org/morimori.git temp-repo
           cd temp-repo
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
