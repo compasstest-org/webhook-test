@@ -1,0 +1,35 @@
+name: Push to Another Repo
+
+on:
+  workflow_dispatch:  # 手動実行を可能にする
+  push:
+    branches:
+      - main  # mainブランチにpushされたら実行
+
+jobs:
+  sync-repo:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source repository
+        uses: actions/checkout@v4
+
+      - name: Clone destination repository
+        env:
+          DEST_REPO: "https://github.com/compasstest-org/morimori.git"
+        run: |
+          git clone $DEST_REPO destination-repo
+          cd destination-repo
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Copy files to destination repository
+        run: |
+          rsync -av --exclude='.git' --exclude='destination-repo' ./ destination-repo/sync-folder/
+
+      - name: Commit and push changes
+        run: |
+          cd destination-repo
+          git add .
+          git commit -m "Sync files from source repository" || echo "No changes to commit"
+          git push origin main
