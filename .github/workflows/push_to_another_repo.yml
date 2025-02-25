@@ -27,7 +27,7 @@ jobs:
 
       - name: Clone destination repository
         run: |
-          git clone https://${{ secrets.GITHUB_TOKEN }}@github.com/compasstest-org/morimori.git temp-repo
+          git clone https://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@github.com/compasstest-org/morimori.git temp-repo
           cd temp-repo
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
