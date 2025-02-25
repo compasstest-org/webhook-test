@@ -1,4 +1,4 @@
-name: Push to Another Repo
+name: Push Specific File to Another Repo
 
 on:
   workflow_dispatch:  # 手動実行を可能にする
@@ -7,37 +7,39 @@ on:
       - main  # mainブランチにpushされたら実行
 
 jobs:
-  sync-repo:
+  sync-file:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout source repository
         uses: actions/checkout@v4
+        with:
+          # ソースリポジトリの指定
+          repository: 'compasstest-org/webhook-test'
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up Git authentication
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          # GitHubのアクセストークンを環境変数として渡す
-          echo "https://${GITHUB_TOKEN}@github.com" > ~/.git-credentials
+          echo "https://${{ secrets.GITHUB_TOKEN }}@github.com" > ~/.git-credentials
           git config --global credential.helper store
 
-      - name: Clone destination repository directly into the current directory
+      - name: Clone destination repository
         run: |
-          # トークンを含めたURLを利用してクローン
-          git clone --depth=1 https://${GITHUB_TOKEN}@github.com/compasstest-org/morimori.git temp-repo
+          git clone https://${{ secrets.GITHUB_TOKEN }}@github.com/compasstest-org/morimori.git temp-repo
           cd temp-repo
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Copy files to destination repository root
+      - name: Copy specific file to destination repository
         run: |
-          # 親ディレクトリからtemp-repoの直下にファイルをコピー
-          rsync -av --exclude='.git' --exclude='temp-repo' ../ ./ 
+          # コピーしたいファイルを指定
+          cp ../template.yaml ./
 
       - name: Commit and push changes
         run: |
           cd temp-repo
-          git add .
-          git commit -m "Sync files from source repository" || echo "No changes to commit"
+          git add path/to/destination/file.txt
+          git commit -m "Add specific file to destination repository" || echo "No changes to commit"
           git push origin main
