@@ -16,21 +16,21 @@ jobs:
         with:
           # ソースリポジトリの指定
           repository: 'compasstest-org/webhook-test'
-          token: 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
+          token: ${{ secrets.TOKEN }}
 
       - name: Set up Git authentication
         run: |
           git config --global user.name "kaichi-ryunosuke"
           git config --global user.email "kaichi.ryunosuke.m7b@jp.nssol.nipponsteel.com"
-          echo "https://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@github.com" > ~/.git-credentials
+          echo "https://${{ secrets.TOKEN }}@github.com" > ~/.git-credentials
           git config --global credential.helper store
 
       - name: Clone destination repository
         run: |
-          git clone https://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@github.com/compasstest-org/morimori.git temp-repo
+          git clone https://${{ secrets.TOKEN }}@github.com/compasstest-org/morimori.git temp-repo
           cd temp-repo
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name "kaichi-ryunosuke"
+          git config user.email "kaichi.ryunosuke.m7b@jp.nssol.nipponsteel.com"
 
       - name: Copy specific file to destination repository
         run: |
