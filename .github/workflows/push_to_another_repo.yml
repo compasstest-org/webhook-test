@@ -22,12 +22,12 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          echo "https://${{ secrets.GITHUB_TOKEN }}@github.com" > ~/.git-credentials
+          echo "https://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@github.com" > ~/.git-credentials
           git config --global credential.helper store
 
       - name: Clone destination repository
         run: |
-          git clone https://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@github.com/compasstest-org/morimori.git temp-repo
+          git clone https://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@github.com/compasstest-org/morimori.git temp-repo
           cd temp-repo
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
