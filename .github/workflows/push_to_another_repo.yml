@@ -16,7 +16,7 @@ jobs:
         with:
           # ソースリポジトリの指定
           repository: 'compasstest-org/webhook-test'
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: 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
 
       - name: Set up Git authentication
         run: |
