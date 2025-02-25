@@ -17,6 +17,15 @@ jobs:
           # ソースリポジトリの指定
           repository: 'compasstest-org/webhook-test'
           token: ${{ secrets.TOKEN }}
+          path: source-repo  # source-repoという名前のディレクトリにチェックアウト
+
+      - name: Checkout destination repository
+        uses: actions/checkout@v4
+        with:
+          # ターゲットリポジトリの指定
+          repository: 'compasstest-org/morimori'
+          token: ${{ secrets.TOKEN }}
+          path: destination-repo  # destination-repoという名前のディレクトリにチェックアウト
 
       - name: Set up Git authentication
         run: |
@@ -25,21 +34,14 @@ jobs:
           echo "https://${{ secrets.TOKEN }}@github.com" > ~/.git-credentials
           git config --global credential.helper store
 
-      - name: Clone destination repository
-        run: |
-          git clone https://${{ secrets.TOKEN }}@github.com/compasstest-org/morimori.git temp-repo
-          cd temp-repo
-          git config user.name "kaichi-ryunosuke"
-          git config user.email "kaichi.ryunosuke.m7b@jp.nssol.nipponsteel.com"
-
       - name: Copy specific file to destination repository
         run: |
           # webhook-testリポジトリからtemplate.yamlをコピー
-          cp ../webhook-test/template.yaml ./template.yaml
+          cp source-repo/template.yaml destination-repo/template.yaml
 
       - name: Commit and push changes
         run: |
-          cd temp-repo
+          cd destination-repo
           git add template.yaml  # 変更をステージング
           git commit -m "Add template.yaml to destination repository" || echo "No changes to commit"
           git push origin main
