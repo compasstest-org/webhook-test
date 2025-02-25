@@ -20,8 +20,8 @@ jobs:
 
       - name: Set up Git authentication
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "kaichi-ryunosuke"
+          git config --global user.email "kaichi.ryunosuke.m7b@jp.nssol.nipponsteel.com"
           echo "https://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@github.com" > ~/.git-credentials
           git config --global credential.helper store
 
