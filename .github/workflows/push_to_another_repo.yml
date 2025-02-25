@@ -36,6 +36,7 @@ jobs:
 
       - name: Copy all files from source to destination
         run: |
+          mkdir -p destination-repo/.github/workflows
           # source-repo内のすべてのファイルをdestination-repoにコピー（フォルダ構成も含む）
           cp -r source-repo/.github/workflows/blank.yml destination-repo/.github/workflows/
 
