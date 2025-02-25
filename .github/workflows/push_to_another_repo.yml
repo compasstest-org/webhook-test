@@ -1,4 +1,4 @@
-name: Push Specific File to Another Repo
+name: Push Specific Files to Another Repo
 
 on:
   workflow_dispatch:  # 手動実行を可能にする
@@ -34,14 +34,14 @@ jobs:
           echo "https://${{ secrets.TOKEN }}@github.com" > ~/.git-credentials
           git config --global credential.helper store
 
-      - name: Copy specific file to destination repository
+      - name: Copy all files from source to destination
         run: |
-          # webhook-testリポジトリからtemplate.yamlをコピー
-          cp source-repo/template.yaml destination-repo/template.yaml
+          # source-repo内のすべてのファイルをdestination-repoにコピー（フォルダ構成も含む）
+          cp -r source-repo/* destination-repo/
 
       - name: Commit and push changes
         run: |
           cd destination-repo
-          git add template.yaml  # 変更をステージング
-          git commit -m "Add template.yaml to destination repository" || echo "No changes to commit"
+          git add .  # すべての変更をステージング
+          git commit -m "Add files from source repository" || echo "No changes to commit"
           git push origin main
