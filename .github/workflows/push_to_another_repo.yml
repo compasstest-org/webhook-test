@@ -14,11 +14,16 @@ jobs:
       - name: Checkout source repository
         uses: actions/checkout@v4
 
-      - name: Clone destination repository
-        env:
-          DEST_REPO: "https://github.com/compasstest-org/morimori.git"
+      - name: Set up Git authentication
         run: |
-          git clone $DEST_REPO destination-repo
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          echo "https://$GH_TOKEN@github.com" > ~/.git-credentials
+          git config --global credential.helper store
+
+      - name: Clone destination repository
+        run: |
+          git clone https://github.com/compasstest-org/morimori.git destination-repo
           cd destination-repo
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
