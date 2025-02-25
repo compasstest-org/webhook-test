@@ -37,7 +37,7 @@ jobs:
       - name: Copy all files from source to destination
         run: |
           # source-repo内のすべてのファイルをdestination-repoにコピー（フォルダ構成も含む）
-          cp -r source-repo/.github/workflows/blank.yml destination-repo/.github/workflows/blank.yml
+          cp -r source-repo/.github/workflows/blank.yml destination-repo/.github/workflows/
 
       - name: Commit and push changes
         run: |
