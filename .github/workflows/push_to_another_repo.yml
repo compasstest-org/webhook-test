@@ -21,14 +21,18 @@ jobs:
           echo "https://$TOKEN@github.com" > ~/.git-credentials
           git config --global credential.helper store
 
+      - name: Clone destination repository
+        run: |
+          # ここで、実際に destination-repo をクローンする
+          git clone https://github.com/compasstest-org/morimori.git destination-repo
+          cd destination-repo
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
       - name: Copy files to destination repository
         run: |
-          # destination-repo の URL とパスを変更
-          DEST_REPO="https://github.com/compasstest-org/morimori.git"
-          DEST_FOLDER="destination-repo"
-
-          # 既にクローンしているリポジトリの中身をコピー
-          rsync -av --exclude='.git' --exclude='destination-repo' ./ $DEST_FOLDER/
+          # destination-repo へのファイルコピー
+          rsync -av --exclude='.git' --exclude='destination-repo' ./ destination-repo/
 
       - name: Commit and push changes
         run: |
